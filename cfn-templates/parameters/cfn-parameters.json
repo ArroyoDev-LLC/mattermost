@@ -5,5 +5,15 @@
     },
     "Tags": {
         "EnvironmentName": "mattermost-app"
+    },
+    "StackPolicy": {
+        "Statement": [
+            {
+                "Effect": "Allow",
+                "NotAction": "Update:Delete",
+                "Principal": "*",
+                "Resource": "*"
+            }
+        ]
     }
 }
