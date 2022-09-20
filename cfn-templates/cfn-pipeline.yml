@@ -22,12 +22,12 @@ Parameters:
   GithubConnectionArn:
     Type: AWS::SSM::Parameter::Value<String>
     Description: Arn of AWSGithub Connection
-    Default: /mdstn/GitHubConnectionArn
+    Default: /ad/GitHubConnectionArn
 
   RepoName:
     Type: String
     Description: Repo name on Github
-    Default: madstone-tech/mattermost
+    Default: arroyodev-llc/mattermost
 
   BranchName:
     Type: String
@@ -142,6 +142,7 @@ Resources:
 
   MattermostRepository:
     Type: AWS::ECR::Repository
+    DeletionPolicy: Retain
     Properties:
       RepositoryPolicyText: |
         {
@@ -522,7 +523,7 @@ Resources:
                 Provider: CodeStarSourceConnection
               Configuration:
                 ConnectionArn: !Ref GithubConnectionArn
-                FullRepositoryId: madstone-tech/mattermost
+                FullRepositoryId: arroyodev-llc/mattermost
                 BranchName: !Ref BuildBranchName
               OutputArtifacts:
                 - Name: App
