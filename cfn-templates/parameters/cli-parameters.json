@@ -1,15 +1,15 @@
 [
     {
         "ParameterKey": "Route53ZoneName",
-        "ParameterValue": "example.com"
+        "ParameterValue": "chat.arroyodev.com"
     },
     {
         "ParameterKey": "HostedZoneId",
-        "ParameterValue": "Z03264103DY40LXP1A4SH"
+        "ParameterValue": "Z080910926QH3GGXM9ITR"
     },
     {
         "ParameterKey": "FQDomain",
-        "ParameterValue": "chat.example.com"
+        "ParameterValue": "chat.arroyodev.com"
     },
     {
         "ParameterKey": "EnvironmentName",
@@ -17,15 +17,15 @@
     },
     {
         "ParameterKey": "S3BucketCFNTemplates",
-        "ParameterValue": "s3buckettochange"
+        "ParameterValue": "mattermost-deploy"
     },
     {
         "ParameterKey": "SSHKeyPair",
-        "ParameterValue": "ec2-key-name"
+        "ParameterValue": "arroyodev-mattermost"
     },
     {
         "ParameterKey": "ContainerRegistry",
-        "ParameterValue": "containerregistryname"
+        "ParameterValue": "mattermost"
     },
     {
         "ParameterKey": "BackupPolicyParam",
