@@ -53,7 +53,7 @@ RUN yum update -y \
 ####################
 FROM build as mattermost
 
-WORKDIR /mattermost
+ENV PATH="/mattermost/bin:${PATH}"
 
 # Fetch mattermost
 RUN mkdir -p /mattermost/data /mattermost/config /mattermost/plugins /mattermost/client/plugins \
@@ -67,6 +67,7 @@ RUN mkdir -p /mattermost/data /mattermost/config /mattermost/plugins /mattermost
   && useradd -l -u ${PUID} -g ${PGID} mattermost -d /mattermost \
   && chown -R mattermost:mattermost /mattermost /config.json.save /mattermost/plugins /mattermost/client/plugins
 
+WORKDIR /mattermost
 USER mattermost
 
 # Entrypoint
@@ -76,9 +77,9 @@ COPY app/entrypoint.sh /
 HEALTHCHECK CMD curl --fail http://localhost:8000 || exit 1
 EXPOSE 8000
 # Declare volumes for mount point directories
-VOLUME ["/mattermost/data", "/mattermost/logs", "/mattermost/config", "/mattermost/plugins", "/mattermost/client/plugins"]
 CMD ["mattermost"]
 ENTRYPOINT ["/entrypoint.sh"]
+VOLUME ["/mattermost/data", "/mattermost/logs", "/mattermost/config", "/mattermost/plugins", "/mattermost/client/plugins"]
 
 
 ####################
