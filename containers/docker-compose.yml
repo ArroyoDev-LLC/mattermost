@@ -1,5 +1,3 @@
-version: "3"
-
 services:
   db:
     image: postgres:latest
@@ -11,7 +9,7 @@ services:
       - POSTGRES_DB=mattermost
     volumes:
       - db-data:/var/lib/postgresql/data
-    networks: 
+    networks:
       - mattermost-net
 
   pgadmin:
@@ -26,15 +24,16 @@ services:
         - pgadmin:/var/lib/pgadmin
     depends_on:
         - db
-    networks: 
-      - mattermost-net  
+    networks:
+      - mattermost-net
 
   mattermost:
     build:
-      context: app
+      context: .
+      target: mattermost
       args:
-       - edition=team
-       - MM_VERSION=5.35.1
+       - MM_EDITION=team
+       - MM_VERSION=7.2.0
     restart: unless-stopped
     container_name: mattermost
     volumes:
@@ -49,22 +48,24 @@ services:
       - MM_DBNAME=mattermost
       - MM_SQLSETTINGS_DATASOURCE=postgres://mmuser:mmuser_password@db:5432/mattermost?sslmode=disable&connect_timeout=10
       #- MM_CONFIG=/mattermost/config/config.json
-    networks: 
+    networks:
       - mattermost-net
 
 
   matterbridge:
+    image: matterbridge:latest
     build:
-      context: matterbridge
+      context: .
+      target: matterbridge
       args:
-        - VERSION=1.22.1
+        - VERSION=1.25.2
     restart: unless-stopped
     container_name: matterbridge
     volumes:
       - ./matterbridge/config/matterbridge.toml:/matterbridge/config/matterbridge.toml
-    networks: 
+    networks:
       - mattermost-net
-      
+
   web:
     build: web
     ports:
@@ -72,12 +73,12 @@ services:
       - "8443:443"
     read_only: true
     restart: unless-stopped
-    environment: 
+    environment:
       - APP_HOST=mattermost
     volumes:
       # This directory must have cert files if you want to enable SSL
       - web:/cert:ro
-    networks: 
+    networks:
       - mattermost-net
 
 volumes:
