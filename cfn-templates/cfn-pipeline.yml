@@ -338,6 +338,10 @@ Resources:
         BuildSpec: |
           version: 0.2
           phases:
+            install:
+              commands:
+                - echo "Installing Docker Buildx Plugin..." && mkdir -p $HOME/.docker/cli-plugins && curl -L -o $HOME/.docker/cli-plugins/docker-buildx "$DOCKER_BUILDX_URL" && chmod +x $HOME/.docker/cli-plugins/docker-buildx
+                - docker buildx version
             pre_build:
               commands:
                 - echo Logging in to Amazon ECR....
@@ -345,7 +349,7 @@ Resources:
             build:
               commands:
                 - echo "Building the image..."
-                - pushd containers && docker buildx -f build.json --set mattermost.tags=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO:$IMAGE_TAG --set matterbridge.tags=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO:bridge-$IMAGE_TAG --push && popd
+                - pushd containers && docker buildx bake -f build.json --set mattermost.tags=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO:$IMAGE_TAG --set matterbridge.tags=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO:bridge-$IMAGE_TAG --push && popd
             post_build:
               commands:
                 - echo Build completed on `date`
@@ -356,7 +360,7 @@ Resources:
               - image.json
       Environment:
         ComputeType: 'BUILD_GENERAL1_LARGE'
-        Image: 'aws/codebuild/amazonlinux2-x86_64-standard:3.0'
+        Image: 'aws/codebuild/amazonlinux2-x86_64-standard:4.0'
         Type: 'LINUX_CONTAINER'
         PrivilegedMode: true
         EnvironmentVariables:
@@ -390,6 +394,8 @@ Resources:
               ]
           - Name: DOCKER_CLI_EXPERIMENTAL
             Value: enabled
+          - Name: DOCKER_BUILDX_URL
+            Value: https://github.com/docker/buildx/releases/download/v0.9.1/buildx-v0.9.1.linux-amd64
 
   MattermostContainerBuildArm64:
     Type: AWS::CodeBuild::Project
