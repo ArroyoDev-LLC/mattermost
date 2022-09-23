@@ -1,0 +1,48 @@
+{
+  "variable": {
+    "MM_REPO": {
+      "default": "mattermost"
+    },
+    "MM_BRIDGE_REPO": {
+      "default": "matterbridge"
+    },
+    "MM_TAG": {
+      "default": "latest"
+    },
+    "MM_BRIDGE_TAG": {
+      "default": "latest"
+    }
+  },
+  "group": {
+    "default": {
+      "targets": [
+        "matterbridge",
+        "mattermost"
+      ]
+    }
+  },
+  "target": {
+    "matterbridge": {
+      "context": ".",
+      "dockerfile": "Dockerfile",
+      "args": {
+        "VERSION": "1.25.2"
+      },
+      "tags": [
+        "${MM_BRIDGE_REPO}:${MM_BRIDGE_TAG}"
+      ],
+      "target": "matterbridge"
+    },
+    "mattermost": {
+      "context": ".",
+      "dockerfile": "Dockerfile",
+      "args": {
+        "MM_VERSION": "7.2.0"
+      },
+      "tags": [
+        "${MM_REPO}:${MM_TAG}"
+      ],
+      "target": "mattermost"
+    }
+  }
+}
