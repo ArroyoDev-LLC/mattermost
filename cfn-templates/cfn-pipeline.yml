@@ -345,13 +345,11 @@ Resources:
             build:
               commands:
                 - echo "Building the image..."
-                - docker build -t $IMAGE_REPO:$IMAGE_TAG -f containers/app/Dockerfile containers/app/
-                - docker tag $IMAGE_REPO:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO:$IMAGE_TAG
-                - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO:$IMAGE_TAG
+                - pushd containers && docker buildx -f build.json --set mattermost.tags=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO:$IMAGE_TAG --set matterbridge.tags=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO:bridge-$IMAGE_TAG --push && popd
             post_build:
               commands:
                 - echo Build completed on `date`
-                - printf '[{"name":"%s","imageUri":"%s.dkr.ecr.%s.amazonaws.com/%s:%s"}]' "$IMAGE_REPO" "$AWS_ACCOUNT_ID" "$AWS_DEFAULT_REGION" "$IMAGE_REPO" "$IMAGE_TAG" > image.json
+                - printf '[{"name":"%s","imageUri":"%s.dkr.ecr.%s.amazonaws.com/%s:%s"}, {"name":"%s","imageUri":"%s.dkr.ecr.%s.amazonaws.com/%s:%s"}]' "$IMAGE_REPO" "$AWS_ACCOUNT_ID" "$AWS_DEFAULT_REGION" "$IMAGE_REPO" "$IMAGE_TAG" "$IMAGE_REPO" "$AWS_ACCOUNT_ID" "$AWS_DEFAULT_REGION" "$IMAGE_REPO" "bridge-${IMAGE_TAG}" > image.json
                 - cat image.json
           artifacts:
             files:
