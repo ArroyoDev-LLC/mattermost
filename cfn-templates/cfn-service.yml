@@ -131,7 +131,7 @@ Resources:
               awslogs-stream-prefix: "mattermost-server"
         - Name: "matterbridge-server"
           Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ContainerRegistry}:bridge-latest-amd64"
-          Essential: true
+          Essential: false
           MountPoints:
             - ContainerPath: /matterbridge/config
               ReadOnly: false
