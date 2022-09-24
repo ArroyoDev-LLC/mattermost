@@ -37,7 +37,7 @@
       "context": ".",
       "dockerfile": "Dockerfile",
       "args": {
-        "MM_VERSION": "7.2.0"
+        "MM_VERSION": "7.3.0"
       },
       "tags": [
         "${MM_REPO}:${MM_TAG}"

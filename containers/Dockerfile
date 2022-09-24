@@ -2,7 +2,7 @@
 FROM public.ecr.aws/amazonlinux/amazonlinux:latest as build
 
 ARG \
-  MM_VERSION=7.2.0 \
+  MM_VERSION=7.3.0 \
   MM_EDITION=enterprise \
   MM_PLATFORM=linux-amd64 \
   MM_BINARY \
@@ -93,7 +93,7 @@ FROM build as matterbridge
 #    && rm -rf /var/cache/yum
 
 # Create User
-RUN mkdir -p /matterbridge /matterbridge/config \
+RUN mkdir -p /matterbridge /matterbridge/config /matterbridge/data /matterbridge/logs \
     && groupadd -g ${PGID} matterbridge \
 	&& useradd -l -u ${PUID} -g ${PGID} matterbridge -d /matterbridge
 
