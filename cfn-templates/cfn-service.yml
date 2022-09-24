@@ -123,6 +123,8 @@ Resources:
             - ContainerPort: 8000
               HostPort: 8000
               Protocol: tcp
+          HealthCheck:
+            Command: [ "CMD-SHELL", "curl -f http://localhost:8000 || exit 1" ]
           LogConfiguration:
             LogDriver: "awslogs"
             Options:
@@ -142,6 +144,9 @@ Resources:
             - ContainerPath: /matterbridge/logs
               ReadOnly: false
               SourceVolume: mattermost-logs
+          DependsOn:
+            - ContainerName: mattermost-server
+              Condition: HEALTHY
           LogConfiguration:
             LogDriver: "awslogs"
             Options:
