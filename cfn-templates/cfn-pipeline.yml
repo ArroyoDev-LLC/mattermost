@@ -349,7 +349,14 @@ Resources:
             build:
               commands:
                 - echo "Building the image..."
-                - pushd containers && docker buildx bake -f build.json --set mattermost.tags=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO:$IMAGE_TAG --set matterbridge.tags=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO:bridge-$IMAGE_TAG --push && popd
+                - |
+                  pushd containers \
+                    && docker buildx bake \
+                        -f build.json \
+                        --set mattermost.tags=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO:$IMAGE_TAG \
+                        --set matterbridge.tags=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$IMAGE_REPO:bridge-$IMAGE_TAG \
+                        --push \
+                    && popd
             post_build:
               commands:
                 - echo Build completed on `date`
