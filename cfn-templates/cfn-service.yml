@@ -129,6 +129,25 @@ Resources:
               awslogs-region: !Sub ${AWS::Region}
               awslogs-group: !Ref LogGroupName
               awslogs-stream-prefix: "mattermost-server"
+        - Name: "matterbridge-server"
+          Image: !Sub "${AWS::AccountId}.dkr.ecr.${AWS::Region}.amazonaws.com/${ContainerRegistry}:bridge-latest-amd64"
+          Essential: true
+          MountPoints:
+            - ContainerPath: /matterbridge/config
+              ReadOnly: false
+              SourceVolume: mattermost-config
+            - ContainerPath: /matterbridge/data
+              ReadOnly: false
+              SourceVolume: mattermost-data
+            - ContainerPath: /matterbridge/logs
+              ReadOnly: false
+              SourceVolume: mattermost-logs
+          LogConfiguration:
+            LogDriver: "awslogs"
+            Options:
+              awslogs-region: !Sub ${AWS::Region}
+              awslogs-group: !Ref LogGroupName
+              awslogs-stream-prefix: "matterbridge-server"
       Volumes:
         - EFSVolumeConfiguration:
             FilesystemId: !Ref EFSId
